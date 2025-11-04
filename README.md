@@ -46,7 +46,11 @@ The build outputs to `dist/` and produces:
 
 ## Project layout
 
-- `src/components/Markdown` – original Markdown component code and tests (copied verbatim)
+- `src/markdown` – markdown component, tests, and supporting modules
+    - `Markdown.tsx` – main React component + context provider
+    - `components/` – rendering primitives (tables, math, spoilers, etc.)
+    - `models/` – shared data contracts for back references
+    - `utils/` – helper utilities such as `getCryptoHash`
 - `src/index.ts` – library entrypoint exports
 - `tsconfig.*` – TypeScript configuration for development and type emission
 - `vite.config.ts` – Vite library build configuration
