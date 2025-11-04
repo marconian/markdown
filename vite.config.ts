@@ -2,13 +2,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'node:path';
 
-const stripTildeImporter = (url: string) => {
-    if (url.startsWith('~')) {
-        return { file: url.slice(1) };
-    }
-    return null;
-};
-
 const external = [
     'react',
     'react-dom',
@@ -18,7 +11,6 @@ const external = [
     '@fortawesome/fontawesome-svg-core',
     '@fortawesome/pro-solid-svg-icons',
     '@fortawesome/pro-light-svg-icons',
-    '@tauw/tauw-theme-sass',
 ];
 
 const sharedDependencies = ['dompurify', 'emojilib', 'highlight.js', 'katex', 'lodash', 'mermaid', 'uuid'];
@@ -52,13 +44,6 @@ export default defineConfig({
                     react: 'React',
                     'react-dom': 'ReactDOM',
                 },
-            },
-        },
-    },
-    css: {
-        preprocessorOptions: {
-            scss: {
-                importer: [stripTildeImporter],
             },
         },
     },

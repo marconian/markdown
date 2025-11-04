@@ -13,7 +13,10 @@ export default defineConfig({
         environment: 'jsdom',
         globals: true,
         include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
-        setupFiles: ['@testing-library/jest-dom/vitest'],
+        setupFiles: ['@testing-library/jest-dom/vitest', 'src/markdown/__tests__/test-utils.tsx'],
+        deps: {
+            inline: ['@mui/x-data-grid'],
+        },
         coverage: {
             provider: 'v8',
             reporter: ['text', 'lcov'],
