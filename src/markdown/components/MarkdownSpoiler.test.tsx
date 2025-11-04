@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, within } from '@testing-library/react';
 import Markdown from '..';
 import { resetRenderMocks } from '../__tests__/test-utils';
 
