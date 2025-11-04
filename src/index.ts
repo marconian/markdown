@@ -1,4 +1,5 @@
 export { default as Markdown, MarkdownContext } from './markdown/Markdown';
+export { MarkdownGlobalStyles } from './markdown/MarkdownGlobalStyles';
 export { getBackRefs } from './markdown/methods';
 export { MarkdownElement } from './markdown/components/MarkdownElement';
 

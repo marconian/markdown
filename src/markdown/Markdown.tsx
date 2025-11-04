@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import { createContext, PropsWithChildren, useMemo } from 'react';
-import './Markdown.scss';
+import MarkdownGlobalStyles from './MarkdownGlobalStyles';
 import { getBackRefs } from './methods';
 import LinkBackRef from './models/LinkBackRef';
 import { MarkdownElement } from './components/MarkdownElement';
@@ -18,11 +18,14 @@ function Markdown({ children }: PropsWithChildren) {
     const { text: markdown, refs } = useMemo(() => getBackRefs(rawMarkdown), [rawMarkdown]);
 
     return (
-        <div className="markdown-paper">
-            <MarkdownContext.Provider value={{ markdown, backRefs: refs }}>
-                <MarkdownElement>{markdown}</MarkdownElement>
-            </MarkdownContext.Provider>
-        </div>
+        <>
+            <MarkdownGlobalStyles />
+            <div className="markdown-paper">
+                <MarkdownContext.Provider value={{ markdown, backRefs: refs }}>
+                    <MarkdownElement>{markdown}</MarkdownElement>
+                </MarkdownContext.Provider>
+            </div>
+        </>
     );
 }
 

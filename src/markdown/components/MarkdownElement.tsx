@@ -855,14 +855,14 @@ export function MarkdownElement({ children, scope }: PropsWithChildren<{ scope?:
         );
     }
 
+    if (!!spoiler) return insertBaseElement(spoiler.index, spoiler.length, <MarkdownSpoiler content={spoiler.content} />);
+
     const table = captureAll(expressions.tableRow, markdown);
     if (!!table) {
         const { captures, startIndex, length } = table;
 
         return insertBaseElement(startIndex, length, <MarkdownTable rows={captures.map((x) => x.groups['text'])} />);
     }
-
-    if (!!spoiler) return insertBaseElement(spoiler.index, spoiler.length, <MarkdownSpoiler content={spoiler.content} />);
 
     const inlineMath = findInlineMathSpan(markdown);
     if (!!inlineMath) return insertBaseElement(inlineMath.index, inlineMath.length, <MarkdownMath expression={inlineMath.expression} />);

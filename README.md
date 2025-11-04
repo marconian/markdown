@@ -6,28 +6,42 @@ A reusable Markdown rendering package extracted from the TauwGPT client applicat
 
 - Full Markdown rendering pipeline with admonitions, tables, spoilers, math, charts, and emoji support
 - Context-aware back references for code blocks, footnotes, and links
-- Uses the existing Tauw design language via `@tauw/tauw-theme-sass`
+- Matches the Tauw design language through CSS variables and automatically injected global styles
 - Ships pre-built ES module and CommonJS bundles plus TypeScript declarations
 
 ## Getting started
 
 ```bash
-pnpm add @tauw/markdown @emotion/react @emotion/styled @mui/material @mui/x-data-grid @fortawesome/react-fontawesome @fortawesome/pro-solid-svg-icons @fortawesome/pro-light-svg-icons @fortawesome/fontawesome-svg-core @tauw/tauw-theme-sass
+pnpm add @tauw/markdown @emotion/react @emotion/styled @mui/material @mui/x-data-grid @fortawesome/react-fontawesome @fortawesome/pro-solid-svg-icons @fortawesome/pro-light-svg-icons @fortawesome/fontawesome-svg-core
 ```
 
 The package publishes both ESM and CJS builds. In your React application:
 
 ```tsx
 import { Markdown } from '@tauw/markdown';
-import '@tauw/markdown/styles';
 
 export function Article({ content }: { content: string }) {
     return <Markdown>{content}</Markdown>;
 }
 ```
 
+Global styles are injected automatically the first time you render `Markdown`. If you prefer to control the injection point (for example, mounting once at the application shell), you can import and render the optional helper:
+
+```tsx
+import { Markdown, MarkdownGlobalStyles } from '@tauw/markdown';
+
+export function AppShell({ content }: { content: string }) {
+    return (
+        <>
+            <MarkdownGlobalStyles />
+            <Markdown>{content}</Markdown>
+        </>
+    );
+}
+```
+
 > **Note**
-> Consumers are responsible for providing peer dependencies (React, MUI, FontAwesome Pro icons, Tauw theme sass, etc.).
+> Consumers are responsible for providing peer dependencies (React, MUI, FontAwesome Pro icons, etc.).
 
 ## Development
 
@@ -42,7 +56,7 @@ The build outputs to `dist/` and produces:
 - `dist/index.mjs` (ES module bundle)
 - `dist/index.cjs` (CommonJS bundle)
 - `dist/types/*` (TypeScript declarations)
-- `dist/styles/style.css` (compiled styles)
+  (global styles are now injected at runtime — no standalone CSS file)
 
 ## Project layout
 
@@ -68,4 +82,4 @@ New shared job templates were added in `Shared.Pipelines/jobs` to support Node p
 
 ## Known warnings
 
-- Sass currently emits deprecation warnings due to upstream `@import` usage in theme packages. No code changes were made; warnings are documented for future migrations.
+- None at the moment.
