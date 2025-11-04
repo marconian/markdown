@@ -1,7 +1,7 @@
 import { Divider } from '@mui/material';
 import { PropsWithChildren, ReactNode, useContext, useMemo } from 'react';
-import { MarkdownContext } from '../Markdown';
-import { captureAll } from '../methods';
+import { MarkdownContext } from '..';
+import { captureAll } from '../utils/captureAll';
 import CodeBlock from './CodeBlock';
 import MarkdownLink from './MarkdownLink';
 import MarkdownHeader from './MarkdownHeader';
@@ -18,7 +18,7 @@ import MarkdownItalic from './MarkdownItalic';
 import CodeBackRef from '../models/CodeBackRef';
 import LinkBackRef from '../models/LinkBackRef';
 import CaptureInfo from '../models/CaptureInfo';
-import emojis from '../emojis';
+import emojis from '../utils/emojis';
 import MarkdownMarked from './MarkdownMarked';
 import MarkdownInserted from './MarkdownInserted';
 import MarkdownSubScript from './MarkdownSubScript';

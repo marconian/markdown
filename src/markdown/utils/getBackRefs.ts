@@ -1,67 +1,11 @@
-import LinkBackRef from './models/LinkBackRef';
-import CaptureInfo from './models/CaptureInfo';
-import CodeBackRef from './models/CodeBackRef';
 import { sortBy } from 'lodash';
 import { v4 as uuid } from 'uuid';
-import FootnoteBackRef from './models/FootnoteBackRef';
-
-export function captureAll(regExp: RegExp, text: string) {
-    const paragraphsMatch = text.matchAll(regExp);
-
-    let result: IteratorResult<RegExpExecArray>;
-    const captures: CaptureInfo[] = [];
-    do {
-        result = paragraphsMatch.next();
-        const value = result.value as RegExpExecArray | null;
-        if (!value?.groups) break;
-
-        captures.push({
-            index: value.index,
-            length: value[0].length,
-            groups: value.groups,
-        });
-    } while (!result.done);
-
-    if (!captures.length) return null;
-
-    const startIndex = Math.min(...captures.map((x) => x.index));
-    const endIndex = Math.max(...captures.map((x) => x.index + x.length));
-    const length = endIndex - startIndex;
-
-    return { captures, startIndex, endIndex, length };
-}
-
-function getIndentWidth(line: string) {
-    let width = 0;
-    for (const ch of line) {
-        if (ch === ' ') width += 1;
-        else if (ch === '\t') width += 4;
-        else break;
-    }
-    return width;
-}
-
-function stripIndent(line: string, width: number) {
-    if (width <= 0) return line;
-
-    let remaining = width;
-    let index = 0;
-    while (remaining > 0 && index < line.length) {
-        const char = line[index];
-        if (char === ' ') {
-            remaining -= 1;
-            index++;
-        } else if (char === '\t') {
-            const removal = Math.min(4, remaining);
-            remaining -= removal;
-            index++;
-        } else {
-            break;
-        }
-    }
-
-    return line.slice(index);
-}
+import CodeBackRef from '../models/CodeBackRef';
+import FootnoteBackRef from '../models/FootnoteBackRef';
+import LinkBackRef from '../models/LinkBackRef';
+import { captureAll } from './captureAll';
+import { getIndentWidth } from './getIndentWidth';
+import { stripIndent } from './stripIndent';
 
 export function getBackRefs(markdown: string): {
     text: string;

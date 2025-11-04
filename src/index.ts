@@ -1,6 +1,6 @@
-export { default as Markdown, MarkdownContext } from './markdown/Markdown';
-export { MarkdownGlobalStyles } from './markdown/MarkdownGlobalStyles';
-export { getBackRefs } from './markdown/methods';
+export { default as Markdown, MarkdownContext } from './markdown';
+export { MarkdownGlobalStyles } from './markdown/styles';
+export { getBackRefs } from './markdown/utils/getBackRefs';
 export { MarkdownElement } from './markdown/components/MarkdownElement';
 
 export type { DefinitionListItem } from './markdown/components/MarkdownDefinitionList';

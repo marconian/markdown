@@ -1,5 +1,5 @@
 import { render, waitFor, within } from '@testing-library/react';
-import Markdown from '../Markdown';
+import Markdown from '..';
 import { highlightElement, resetRenderMocks } from '../__tests__/test-utils';
 
 describe('CodeBlock', () => {

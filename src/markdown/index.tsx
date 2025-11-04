@@ -1,8 +1,8 @@
 ﻿'use client';
 
 import { createContext, PropsWithChildren, useMemo } from 'react';
-import MarkdownGlobalStyles from './MarkdownGlobalStyles';
-import { getBackRefs } from './methods';
+import MarkdownGlobalStyles from './styles';
+import { getBackRefs } from './utils/getBackRefs';
 import LinkBackRef from './models/LinkBackRef';
 import { MarkdownElement } from './components/MarkdownElement';
 import CodeBackRef from './models/CodeBackRef';

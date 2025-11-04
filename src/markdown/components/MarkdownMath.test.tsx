@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import Markdown from '../Markdown';
+import Markdown from '..';
 import katex from 'katex';
 import { resetRenderMocks } from '../__tests__/test-utils';
 

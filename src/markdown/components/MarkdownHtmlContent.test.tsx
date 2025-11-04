@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import Markdown from '../Markdown';
+import Markdown from '..';
 import { resetRenderMocks } from '../__tests__/test-utils';
 
 describe('MarkdownHtmlContent', () => {

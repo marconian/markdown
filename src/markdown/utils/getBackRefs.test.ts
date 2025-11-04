@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { getBackRefs } from './methods';
-import type CodeBackRef from './models/CodeBackRef';
-import type FootnoteBackRef from './models/FootnoteBackRef';
-import type LinkBackRef from './models/LinkBackRef';
+import { getBackRefs } from './getBackRefs';
+import type CodeBackRef from '../models/CodeBackRef';
+import type FootnoteBackRef from '../models/FootnoteBackRef';
+import type LinkBackRef from '../models/LinkBackRef';
 
 type BackRef = LinkBackRef | FootnoteBackRef | CodeBackRef;
 
@@ -34,7 +34,7 @@ describe('getBackRefs', () => {
         const { text, refs } = getBackRefs(markdown);
 
         expect(text).not.toContain('```ts');
-        expect(text).toMatch(/\[_\]\[[^\]]+\]/); // injected placeholder for code block
+        expect(text).toMatch(/\[_\]\[[^\]]+\]/);
         expect(text).not.toContain('[^note]:');
         expect(text).not.toContain('[ref]:');
 
