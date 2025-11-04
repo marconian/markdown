@@ -1,0 +1,24 @@
+# Source files
+src/
+
+# Configuration
+*.config.js
+*.config.cjs
+*.config.mjs
+*.config.ts
+vite.config.ts
+vitest.config.ts
+tsconfig.json
+tsconfig.base.json
+tsconfig.build.json
+
+# Workspace
+pipelines/
+.pnpm-store/
+node_modules/
+coverage/
+
+# Misc
+.gitignore
+.npmignore
+.npmrc
