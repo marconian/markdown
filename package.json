@@ -1,6 +1,6 @@
 {
     "name": "@tauw/markdown",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Tauw Markdown renderer components packaged as a reusable module.",
     "type": "module",
     "main": "./dist/index.cjs",
@@ -18,7 +18,7 @@
         "dist"
     ],
     "scripts": {
-        "build": "pnpm run build:types && vite build",
+        "build": "vite build && pnpm run build:types",
         "build:types": "tsc -p tsconfig.build.json",
         "test": "vitest run",
         "test:watch": "vitest",
