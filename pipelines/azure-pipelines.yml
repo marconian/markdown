@@ -28,6 +28,10 @@ parameters:
     displayName: 'Build Artifact Name'
     type: string
     default: 'MarkdownPackageArtifact'
+  - name: publishAlpha
+    displayName: 'Publish alpha (manual run)'
+    type: boolean
+    default: false
 
 stages:
   - stage: Build
@@ -43,21 +47,51 @@ stages:
   - stage: Test
     displayName: 'Run Tests'
     dependsOn: []
-    condition: and(succeeded(), ${{ parameters.runTests }})
+    condition: ${{ parameters.runTests }}
     jobs:
       - template: jobs/run-node-tests-job.yml@SharedPipelines
         parameters:
           packageDirectory: $(PACKAGE_DIRECTORY)
           nodeVersion: ${{ parameters.nodeVersion }}
 
-  - stage: Deploy
-    displayName: 'Deploy Package'
+  - stage: PublishAlpha
+    displayName: 'Publish Alpha Package'
     dependsOn:
       - Build
       - Test
-    condition: and(succeeded('Build'), or(not(${{ parameters.runTests }}), succeeded('Test')), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    condition: |
+      and(
+        succeeded('Build'),
+        or(not(${{ parameters.runTests }}), succeeded('Test')),
+        ne(variables['Build.Reason'], 'PullRequest'),
+        or(
+          eq(variables['Build.SourceBranch'], 'refs/heads/dev'),
+          and(eq(variables['Build.Reason'], 'Manual'), eq('${{ parameters.publishAlpha }}', 'true'))
+        )
+      )
     jobs:
       - template: jobs/deploy-node-package-job.yml@SharedPipelines
         parameters:
           artifactName: ${{ parameters.artifactName }}
           nodeVersion: ${{ parameters.nodeVersion }}
+          npmTag: 'alpha'
+
+  - stage: PublishStable
+    displayName: 'Publish Stable Package'
+    dependsOn:
+      - Build
+      - Test
+    condition: |
+      and(
+        succeeded('Build'),
+        or(not(${{ parameters.runTests }}), succeeded('Test')),
+        ne(variables['Build.Reason'], 'PullRequest'),
+        eq(variables['Build.SourceBranch'], 'refs/heads/main')
+      )
+    jobs:
+      - template: jobs/deploy-node-package-job.yml@SharedPipelines
+        parameters:
+          artifactName: ${{ parameters.artifactName }}
+          nodeVersion: ${{ parameters.nodeVersion }}
+          environment: 'Production'
+          npmTag: 'stable'
