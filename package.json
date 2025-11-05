@@ -1,7 +1,7 @@
 {
     "name": "@tauw/markdown",
-    "version": "0.1.1",
-    "description": "Tauw Markdown renderer components packaged as a reusable module.",
+    "version": "1.0.0",
+    "description": "Enterprise-grade React Markdown renderer with extended syntax support for admonitions, math equations (KaTeX), Mermaid charts, spoilers, definition lists, tables, code highlighting, footnotes, and emoji. Designed for the Tauw design system.",
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.mjs",
@@ -14,8 +14,27 @@
             "default": "./dist/index.mjs"
         }
     },
+    "keywords": [
+        "markdown",
+        "react",
+        "markdown-parser",
+        "markdown-renderer",
+        "admonitions",
+        "katex",
+        "mermaid",
+        "syntax-highlighting",
+        "footnotes",
+        "tables",
+        "emoji",
+        "typescript",
+        "tauw"
+    ],
+    "author": "Tauw Development Team",
+    "license": "UNLICENSED",
+    "private": false,
     "files": [
-        "dist"
+        "dist",
+        "README.md"
     ],
     "scripts": {
         "build": "vite build && pnpm run build:types",
