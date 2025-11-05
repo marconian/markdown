@@ -16,10 +16,6 @@ variables:
   PACKAGE_DIRECTORY: '.'
 
 parameters:
-  - name: enableSecurityChecks
-    displayName: 'Run Advanced Security Checks'
-    type: boolean
-    default: true
   - name: nodeVersion
     displayName: 'Node.js Version'
     type: string
@@ -34,17 +30,6 @@ parameters:
     default: 'MarkdownPackageArtifact'
 
 stages:
-  - stage: Check
-    displayName: 'Advanced Security Checks'
-    condition: and(succeeded(), ${{ parameters.enableSecurityChecks }})
-    dependsOn: []
-    jobs:
-      - template: jobs/advanced-security-checks-job.yml@SharedPipelines
-        parameters:
-          querysuite: 'security-and-quality'
-          enableDepsScanning: false
-          enableCodeqlAnalyze: false
-
   - stage: Build
     displayName: 'Build Package'
     dependsOn: []
