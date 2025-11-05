@@ -13,7 +13,7 @@ resources:
 
 variables:
   PNPM_STORE_PATH: $(Pipeline.Workspace)/.pnpm-store
-  PACKAGE_DIRECTORY: '.'
+  PACKAGE_DIRECTORY: 'Tauw.Markdown'
 
 parameters:
   - name: nodeVersion
