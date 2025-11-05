@@ -13,7 +13,6 @@ resources:
 
 variables:
   PNPM_STORE_PATH: $(Pipeline.Workspace)/.pnpm-store
-  PACKAGE_DIRECTORY: 'Tauw.Markdown'
 
 parameters:
   - name: nodeVersion
@@ -40,7 +39,6 @@ stages:
     jobs:
       - template: jobs/build-node-package-job.yml@SharedPipelines
         parameters:
-          packageDirectory: $(PACKAGE_DIRECTORY)
           artifactName: ${{ parameters.artifactName }}
           nodeVersion: ${{ parameters.nodeVersion }}
 
@@ -51,7 +49,6 @@ stages:
     jobs:
       - template: jobs/run-node-tests-job.yml@SharedPipelines
         parameters:
-          packageDirectory: $(PACKAGE_DIRECTORY)
           nodeVersion: ${{ parameters.nodeVersion }}
 
   - stage: PublishAlpha
