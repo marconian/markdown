@@ -9,7 +9,7 @@ resources:
     - repository: SharedPipelines
       type: git
       name: Shared.Pipelines/Shared.Pipelines
-      ref: refs/heads/feature/node-package-deployment
+      ref: refs/heads/main
 
 variables:
   PNPM_STORE_PATH: $(Pipeline.Workspace)/.pnpm-store
