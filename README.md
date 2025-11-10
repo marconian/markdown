@@ -5,17 +5,19 @@ An enterprise-grade React Markdown rendering package extracted from the TauwGPT 
 ## Features
 
 ### Core Markdown Support
+
 - **Standard Markdown**: Headings (ATX & Setext), paragraphs, line breaks, horizontal rules
 - **Text Formatting**: Bold, italic, bold-italic, strikethrough, marked (==highlight==), inserted (++underline++)
 - **Lists**: Ordered, unordered, nested, and task lists with automatic continuation detection
 - **Links & Images**: Inline, reference-style, autolinks (URLs, www., email), and image embedding
-- **Code**: Inline code spans, indented code blocks, and fenced code blocks with syntax highlighting (via highlight.js)
+- **Code**: Inline code spans, indented code blocks, and fenced code blocks with syntax highlighting (via highlight.js core + opt-in languages)
 - **Blockquotes**: Standard blockquotes with optional author attribution
 
 ### Extended Syntax
+
 - **GitHub-style Admonitions**: Note, Tip, Info, Important, Warning, Caution, Danger with customizable titles
 - **Math Rendering**: Inline ($...$) and display ($$...$$) math equations using KaTeX
-- **Mermaid Charts**: Embedded diagram rendering with full Mermaid.js support
+- **Mermaid Charts**: Embedded diagram rendering with full Mermaid.js support (lazy-loaded on demand)
 - **Tables**: Full table support with MUI DataGrid integration for rich data display
 - **Spoilers**: Collapsible spoiler content (`||hidden text||`)
 - **Definition Lists**: Term-definition pairs with colon syntax
@@ -25,12 +27,14 @@ An enterprise-grade React Markdown rendering package extracted from the TauwGPT 
 - **Advanced Typography**: Subscript (~text~), superscript (^text^)
 
 ### Technical Features
+
 - **Context-Aware References**: Automatic back-reference tracking for code blocks, footnotes, and links
 - **Sanitization**: Built-in DOMPurify integration for safe HTML rendering
 - **TypeScript**: Full type definitions included for all components and utilities
 - **Theming**: Aligns with Tauw design system via CSS variables with auto-injected global styles
 - **Dual Format**: Ships ES module (`.mjs`) and CommonJS (`.cjs`) bundles for broad compatibility
-- **Tree-Shakeable**: Marked with `"sideEffects": false` for optimal bundling
+- **Tree-Shakeable**: Marked with `"sideEffects": false` (except for SCSS) for optimal bundling
+- **Performance Toggles**: `configureHighlight` and `configureMermaid` APIs to control bundled languages and optional Mermaid loading
 
 ## Installation
 
@@ -46,15 +50,15 @@ pnpm add @tauw/markdown @emotion/react @emotion/styled @mui/material @mui/x-data
 
 This package requires the following peer dependencies to be installed in your project:
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `react` / `react-dom` | ^18.0.0 \|\| ^19.0.0 | React framework |
-| `@mui/material` | ^7.0.0 | Material-UI components for tables & UI elements |
-| `@mui/x-data-grid` | ^8.0.0 | Advanced data grid for table rendering |
-| `@emotion/react` / `@emotion/styled` | ^11.0.0 | CSS-in-JS styling |
-| `@fortawesome/react-fontawesome` | ^0.2.0 | Icon rendering |
-| `@fortawesome/pro-solid-svg-icons` | ^6.0.0 | FontAwesome Pro solid icons |
-| `@fortawesome/pro-light-svg-icons` | ^6.0.0 | FontAwesome Pro light icons |
+| Package                              | Version              | Purpose                                         |
+| ------------------------------------ | -------------------- | ----------------------------------------------- |
+| `react` / `react-dom`                | ^18.0.0 \|\| ^19.0.0 | React framework                                 |
+| `@mui/material`                      | ^7.0.0               | Material-UI components for tables & UI elements |
+| `@mui/x-data-grid`                   | ^8.0.0               | Advanced data grid for table rendering          |
+| `@emotion/react` / `@emotion/styled` | ^11.0.0              | CSS-in-JS styling                               |
+| `@fortawesome/react-fontawesome`     | ^0.2.0               | Icon rendering                                  |
+| `@fortawesome/pro-solid-svg-icons`   | ^6.0.0               | FontAwesome Pro solid icons                     |
+| `@fortawesome/pro-light-svg-icons`   | ^6.0.0               | FontAwesome Pro light icons                     |
 
 > **⚠️ Note**: This package requires **FontAwesome Pro** licenses. Ensure your team has appropriate licenses before use.
 
@@ -97,6 +101,7 @@ export function Article({ content }: { content: string }) {
 
 ### Advanced Usage: Direct Component Access
 
+````
 For custom rendering pipelines, you can import individual components and utilities:
 
 ```tsx
@@ -106,8 +111,31 @@ import type { CodeBackRef, FootnoteBackRef, LinkBackRef } from '@tauw/markdown';
 const rawMarkdown = '# Hello\n\nThis is [^1] a test.\n\n[^1]: A footnote';
 const { text, refs } = getBackRefs(rawMarkdown);
 
+### Configuring Optional Integrations
+
+Slim the bundle or opt into advanced features with the configuration helpers exported from the package entry point.
+
+```tsx
+import { configureHighlight, configureMermaid, defaultHighlightLanguages } from '@tauw/markdown';
+import sql from 'highlight.js/lib/languages/sql';
+
+// Register only the highlight.js languages you need (defaults cover JS/TS/JSON/YAML/Bash/Python).
+configureHighlight({
+    languages: [...defaultHighlightLanguages, { name: 'sql', definition: sql }],
+});
+
+// Disable Mermaid entirely (e.g., for projects that never render diagrams).
+configureMermaid({ enabled: false });
+
+// Or provide a custom loader that lazy-loads Mermaid from a CDN or alternative bundle.
+configureMermaid({
+    loader: () => import('mermaid/esm/mermaid.core.mjs'),
+});
+````
+
 // Use refs for custom processing or render with MarkdownElement
-```
+
+````
 
 ## Exports
 
@@ -121,14 +149,20 @@ The package exposes the following exports:
 ### Utilities
 - `getBackRefs(markdown: string)` – Extracts and resolves back-references from markdown text
 - `MarkdownContext` – React context for markdown rendering state
+- `configureHighlight(config)` – Register additional highlight.js languages or override defaults
+- `defaultHighlightLanguages` – The built-in highlight.js language registrations used by the library
+- `configureMermaid(config)` – Enable/disable Mermaid support or provide a custom loader for diagrams
+- `isMermaidEnabled()` – Runtime flag indicating whether Mermaid rendering is active
 
 ### Types
 - `CaptureInfo` – Regex capture information
 - `CodeBackRef` – Code block back-reference definition
-- `FootnoteBackRef` – Footnote back-reference definition  
+- `FootnoteBackRef` – Footnote back-reference definition
 - `LinkBackRef` – Link back-reference definition
 - `TableCellDefinition` – Table cell structure definition
 - `DefinitionListItem` – Definition list item structure
+- `HighlightConfiguration` / `HighlightLanguageRegistration` – Type-safe configuration for syntax highlighting
+- `MermaidConfiguration` – Options for controlling Mermaid loading behaviour
 
 ## Development
 
@@ -141,7 +175,7 @@ pnpm run test:watch    # Run tests in watch mode
 pnpm run build         # Build library bundles and type declarations
 pnpm run lint          # Lint TypeScript/TSX files with ESLint
 pnpm run format        # Format code with Prettier
-```
+````
 
 ### Build Artifacts
 
@@ -216,12 +250,12 @@ The package uses Azure Pipelines for continuous integration and deployment. The 
 
 ### Pipeline Stages
 
-| Stage | Condition | Description |
-|-------|-----------|-------------|
-| **Build** | Always | Installs dependencies via pnpm, builds library bundles, and publishes build artifacts |
-| **Test** | Configurable (`runTests` parameter) | Executes Vitest test suite with jsdom environment; uses pnpm store caching |
-| **PublishAlpha** | `dev` branch or manual trigger | Publishes package to npm with `alpha` dist-tag for pre-release testing |
-| **PublishStable** | `main` branch | Publishes package to npm with `stable` dist-tag for production use |
+| Stage             | Condition                           | Description                                                                           |
+| ----------------- | ----------------------------------- | ------------------------------------------------------------------------------------- |
+| **Build**         | Always                              | Installs dependencies via pnpm, builds library bundles, and publishes build artifacts |
+| **Test**          | Configurable (`runTests` parameter) | Executes Vitest test suite with jsdom environment; uses pnpm store caching            |
+| **PublishAlpha**  | `dev` branch or manual trigger      | Publishes package to npm with `alpha` dist-tag for pre-release testing                |
+| **PublishStable** | `main` branch                       | Publishes package to npm with `stable` dist-tag for production use                    |
 
 ### Pipeline Parameters
 
@@ -233,6 +267,7 @@ The package uses Azure Pipelines for continuous integration and deployment. The 
 ### Shared Templates
 
 The pipeline uses the following job templates from `Shared.Pipelines`:
+
 - `build-node-package-job.yml` – Node.js package build with pnpm
 - `run-node-tests-job.yml` – Node.js test execution with caching
 - `deploy-node-package-job.yml` – npm package publishing
@@ -246,21 +281,22 @@ The pipeline uses the following job templates from `Shared.Pipelines`:
 
 This package bundles the following runtime dependencies:
 
-| Dependency | Version | Purpose |
-|------------|---------|---------|
-| `dompurify` | ^3.2.7 | HTML sanitization for safe rendering |
-| `emojilib` | ^3.0.0 | Emoji shortcode-to-unicode mapping |
-| `highlight.js` | ^11.9.0 | Syntax highlighting for code blocks |
-| `katex` | ^0.16.11 | Math equation rendering |
-| `lodash` | ^4.17.21 | Utility functions |
-| `mermaid` | ^10.9.1 | Diagram and chart rendering |
-| `uuid` | ^9.0.1 | Unique ID generation |
+| Dependency     | Version  | Purpose                                                                          |
+| -------------- | -------- | -------------------------------------------------------------------------------- |
+| `dompurify`    | ^3.2.7   | HTML sanitization for safe rendering                                             |
+| `emojilib`     | ^3.0.0   | Emoji shortcode-to-unicode mapping                                               |
+| `highlight.js` | ^11.9.0  | Syntax highlighting core; only lightweight language packs are bundled by default |
+| `katex`        | ^0.16.11 | Math equation rendering                                                          |
+| `lodash`       | ^4.17.21 | Utility functions                                                                |
+| `mermaid`      | ^10.9.1  | Diagram and chart rendering (lazy-loaded when diagrams are present)              |
+| `uuid`         | ^9.0.1   | Unique ID generation                                                             |
 
 > **Note**: These are bundled as dependencies, not peer dependencies. Consumers do not need to install them separately.
 
 ## Testing
 
 The package includes comprehensive test coverage using:
+
 - **Vitest** – Fast, Vite-powered test runner
 - **jsdom** – Browser environment simulation
 - **@testing-library/react** – React component testing utilities

@@ -3,7 +3,6 @@ import githubLightTheme from 'highlight.js/styles/github.css?inline';
 import githubDarkTheme from 'highlight.js/styles/github-dark.css?inline';
 import katexTheme from 'katex/dist/katex.min.css?inline';
 
-
 const baseStyles = css`
     ${githubLightTheme}
 

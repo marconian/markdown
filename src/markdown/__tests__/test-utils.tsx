@@ -19,10 +19,11 @@ export const { mermaidParse, mermaidRender } = mermaidMocks;
 import '@testing-library/jest-dom/vitest';
 import type { ReactNode } from 'react';
 
-vi.mock('highlight.js', () => ({
-    default: {
-        highlightElement,
-    },
+vi.mock('../highlight', () => ({
+    highlightElement,
+    configureHighlight: vi.fn(),
+    getHighlightInstance: vi.fn(() => ({ highlightElement })),
+    defaultHighlightLanguages: [],
 }));
 
 vi.mock('@mui/x-data-grid/esm/index.css', () => ({}));

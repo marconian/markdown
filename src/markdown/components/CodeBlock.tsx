@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCode } from '@fortawesome/pro-solid-svg-icons';
 import { faCopy } from '@fortawesome/pro-light-svg-icons';
-import hljs from 'highlight.js';
+import { highlightElement } from '../highlight';
 
 function CodeBlock({ code, language }: { code: string; language?: string }) {
     return (
@@ -30,7 +30,7 @@ function CodeBlock({ code, language }: { code: string; language?: string }) {
                     className={`language-${language ?? 'text'}`}
                     ref={(e) => {
                         if (!e || e.hasAttribute('data-highlighted')) return;
-                        hljs.highlightElement(e);
+                        highlightElement(e);
                     }}>
                     {code}
                 </pre>
