@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+          registry-url: https://registry.npmjs.org
 
       - run: pnpm install --frozen-lockfile
 
@@ -42,3 +43,5 @@ jobs:
           fi
 
       - run: npm publish --provenance --tag ${{ steps.tag.outputs.tag }} --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
