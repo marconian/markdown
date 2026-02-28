@@ -1,6 +1,5 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCode } from '@fortawesome/pro-solid-svg-icons';
-import { faCopy } from '@fortawesome/pro-light-svg-icons';
+import CodeIcon from '@mui/icons-material/Code';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { highlightElement } from '../highlight';
 
 function CodeBlock({ code, language }: { code: string; language?: string }) {
@@ -9,7 +8,7 @@ function CodeBlock({ code, language }: { code: string; language?: string }) {
             <div className="code-block-header d-flex justify-content-between rounded-top">
                 {language ? (
                     <div className="code-block-title mx-5 my-auto">
-                        <FontAwesomeIcon icon={faCode} />
+                        <CodeIcon fontSize="small" />
                         <strong className="ms-2">{language}</strong>
                     </div>
                 ) : (
@@ -21,7 +20,7 @@ function CodeBlock({ code, language }: { code: string; language?: string }) {
                     onClick={() => {
                         navigator.clipboard.writeText(code);
                     }}>
-                    <FontAwesomeIcon icon={faCopy} />
+                    <ContentCopyIcon fontSize="small" />
                     <span className="ms-2">copy</span>
                 </button>
             </div>

@@ -1,5 +1,4 @@
-import { faDownload } from '@fortawesome/pro-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DownloadIcon from '@mui/icons-material/Download';
 import { MarkdownElement } from './MarkdownElement';
 
 function normalizeUrlLike(value: string) {
@@ -36,7 +35,7 @@ function MarkdownLink({ url, name, label, isImage = false }: { url: string; name
             </div>
             <div className="markdown-img-download position-absolute">
                 <a className="btn btn-outline-secondary btn-sm rounded-pill" target="_blank" href={url} title={label} download={name} rel="noreferrer">
-                    <FontAwesomeIcon icon={faDownload} />
+                    <DownloadIcon fontSize="small" />
                     <strong className="ms-2">Download</strong>
                 </a>
             </div>

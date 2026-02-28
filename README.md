@@ -1,6 +1,6 @@
-# @tauw/markdown
+# @marconian/markdown
 
-An enterprise-grade React Markdown rendering package extracted from the TauwGPT client application. It provides a comprehensive, production-ready Markdown parser and renderer with extensive syntax support, built for React applications that need rich content presentation.
+A React Markdown renderer with extended syntax support, built for React applications that need rich content presentation.
 
 ## Features
 
@@ -31,9 +31,9 @@ An enterprise-grade React Markdown rendering package extracted from the TauwGPT 
 - **Context-Aware References**: Automatic back-reference tracking for code blocks, footnotes, and links
 - **Sanitization**: Built-in DOMPurify integration for safe HTML rendering
 - **TypeScript**: Full type definitions included for all components and utilities
-- **Theming**: Aligns with Tauw design system via CSS variables with auto-injected global styles
+- **Theming**: CSS variables with auto-injected global styles
 - **Dual Format**: Ships ES module (`.mjs`) and CommonJS (`.cjs`) bundles for broad compatibility
-- **Tree-Shakeable**: Marked with `"sideEffects": false` (except for SCSS) for optimal bundling
+- **Tree-Shakeable**: Marked with `"sideEffects": false` for optimal bundling
 - **Performance Toggles**: `configureHighlight` and `configureMermaid` APIs to control bundled languages and optional Mermaid loading
 
 ## Installation
@@ -41,9 +41,7 @@ An enterprise-grade React Markdown rendering package extracted from the TauwGPT 
 Install the package along with its peer dependencies:
 
 ```bash
-pnpm add @tauw/markdown @emotion/react @emotion/styled @mui/material @mui/x-data-grid \
-  @fortawesome/react-fontawesome @fortawesome/pro-solid-svg-icons @fortawesome/pro-light-svg-icons \
-  @fortawesome/fontawesome-svg-core
+pnpm add @marconian/markdown @emotion/react @emotion/styled @mui/material @mui/icons-material @mui/x-data-grid
 ```
 
 ### Peer Dependencies
@@ -54,13 +52,9 @@ This package requires the following peer dependencies to be installed in your pr
 | ------------------------------------ | -------------------- | ----------------------------------------------- |
 | `react` / `react-dom`                | ^18.0.0 \|\| ^19.0.0 | React framework                                 |
 | `@mui/material`                      | ^7.0.0               | Material-UI components for tables & UI elements |
+| `@mui/icons-material`                | ^7.0.0               | Material-UI icons                               |
 | `@mui/x-data-grid`                   | ^8.0.0               | Advanced data grid for table rendering          |
 | `@emotion/react` / `@emotion/styled` | ^11.0.0              | CSS-in-JS styling                               |
-| `@fortawesome/react-fontawesome`     | ^0.2.0               | Icon rendering                                  |
-| `@fortawesome/pro-solid-svg-icons`   | ^6.0.0               | FontAwesome Pro solid icons                     |
-| `@fortawesome/pro-light-svg-icons`   | ^6.0.0               | FontAwesome Pro light icons                     |
-
-> **⚠️ Note**: This package requires **FontAwesome Pro** licenses. Ensure your team has appropriate licenses before use.
 
 ## Usage
 
@@ -69,7 +63,7 @@ This package requires the following peer dependencies to be installed in your pr
 The package publishes both ESM and CJS builds for universal compatibility:
 
 ```tsx
-import { Markdown } from '@tauw/markdown';
+import { Markdown } from '@marconian/markdown';
 
 export function Article({ content }: { content: string }) {
     return <Markdown>{content}</Markdown>;
@@ -83,7 +77,7 @@ Global styles are automatically injected on the first render of the `Markdown` c
 For better control over style injection (e.g., mounting once at the application root), use `MarkdownGlobalStyles`:
 
 ```tsx
-import { Markdown, MarkdownGlobalStyles } from '@tauw/markdown';
+import { Markdown, MarkdownGlobalStyles } from '@marconian/markdown';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
     return (
@@ -105,8 +99,8 @@ export function Article({ content }: { content: string }) {
 For custom rendering pipelines, you can import individual components and utilities:
 
 ```tsx
-import { MarkdownElement, MarkdownContext, getBackRefs } from '@tauw/markdown';
-import type { CodeBackRef, FootnoteBackRef, LinkBackRef } from '@tauw/markdown';
+import { MarkdownElement, MarkdownContext, getBackRefs } from '@marconian/markdown';
+import type { CodeBackRef, FootnoteBackRef, LinkBackRef } from '@marconian/markdown';
 
 const rawMarkdown = '# Hello\n\nThis is [^1] a test.\n\n[^1]: A footnote';
 const { text, refs } = getBackRefs(rawMarkdown);
@@ -116,7 +110,7 @@ const { text, refs } = getBackRefs(rawMarkdown);
 Slim the bundle or opt into advanced features with the configuration helpers exported from the package entry point.
 
 ```tsx
-import { configureHighlight, configureMermaid, defaultHighlightLanguages } from '@tauw/markdown';
+import { configureHighlight, configureMermaid, defaultHighlightLanguages } from '@marconian/markdown';
 import sql from 'highlight.js/lib/languages/sql';
 
 // Register only the highlight.js languages you need (defaults cover JS/TS/JSON/YAML/Bash/Python).
@@ -202,7 +196,7 @@ dist/
 ## Project Structure
 
 ```
-Tauw.Markdown/
+@marconian/markdown/
 ├── src/
 │   ├── index.ts                    # Package entry point & public exports
 │   ├── global.d.ts                 # Global type declarations
@@ -244,39 +238,6 @@ Tauw.Markdown/
 └── package.json                    # Package metadata & scripts
 ```
 
-## Azure Pipelines CI/CD
-
-The package uses Azure Pipelines for continuous integration and deployment. The pipeline configuration (`pipelines/azure-pipelines.yml`) leverages shared templates from the `Shared.Pipelines` repository.
-
-### Pipeline Stages
-
-| Stage             | Condition                           | Description                                                                           |
-| ----------------- | ----------------------------------- | ------------------------------------------------------------------------------------- |
-| **Build**         | Always                              | Installs dependencies via pnpm, builds library bundles, and publishes build artifacts |
-| **Test**          | Configurable (`runTests` parameter) | Executes Vitest test suite with jsdom environment; uses pnpm store caching            |
-| **PublishAlpha**  | `dev` branch or manual trigger      | Publishes package to npm with `alpha` dist-tag for pre-release testing                |
-| **PublishStable** | `main` branch                       | Publishes package to npm with `stable` dist-tag for production use                    |
-
-### Pipeline Parameters
-
-- `nodeVersion` (default: `20.x`) – Node.js version for build & test
-- `runTests` (default: `true`) – Enable/disable test execution
-- `artifactName` (default: `MarkdownPackageArtifact`) – Build artifact name
-- `publishAlpha` (default: `false`) – Force alpha publish on manual runs
-
-### Shared Templates
-
-The pipeline uses the following job templates from `Shared.Pipelines`:
-
-- `build-node-package-job.yml` – Node.js package build with pnpm
-- `run-node-tests-job.yml` – Node.js test execution with caching
-- `deploy-node-package-job.yml` – npm package publishing
-
-### Triggers
-
-- **Automatic**: Commits to `main` or `dev` branches
-- **Manual**: Via Azure DevOps UI with optional alpha publishing
-
 ## Dependencies
 
 This package bundles the following runtime dependencies:
@@ -304,16 +265,10 @@ The package includes comprehensive test coverage using:
 
 Tests are co-located with source files (`*.test.tsx`) and cover all major rendering features including edge cases for nested lists, complex tables, math expressions, and admonitions.
 
-## License & Attribution
+## License
 
-This package is proprietary to Tauw Group and extracted from the TauwGPT application. It is designed for internal use within Tauw projects and requires appropriate FontAwesome Pro licenses for icon rendering.
+MIT © [marconian](https://github.com/marconian)
 
 ## Contributing
 
-For bugs, feature requests, or questions, please contact the Tauw development team or create an issue in the Azure DevOps repository.
-
----
-
-**Package Maintainer**: Tauw Development Team  
-**Repository**: Shared.Node/Tauw.Markdown  
-**Pipeline**: [View in Azure DevOps](pipelines/azure-pipelines.yml)
+Contributions are welcome! Please open an issue or submit a pull request on [GitHub](https://github.com/marconian/react-markdown).

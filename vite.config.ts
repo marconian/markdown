@@ -6,11 +6,8 @@ const external = [
     'react',
     'react-dom',
     '@mui/material',
+    '@mui/icons-material',
     '@mui/x-data-grid',
-    '@fortawesome/react-fontawesome',
-    '@fortawesome/fontawesome-svg-core',
-    '@fortawesome/pro-solid-svg-icons',
-    '@fortawesome/pro-light-svg-icons',
 ];
 
 const sharedDependencies = ['dompurify', 'emojilib', 'highlight.js', 'katex', 'lodash', 'mermaid', 'uuid'];
@@ -27,7 +24,7 @@ export default defineConfig({
         emptyOutDir: true,
         lib: {
             entry: path.resolve(__dirname, 'src/index.ts'),
-            name: 'TauwMarkdown',
+            name: 'Markdown',
             formats: ['es', 'cjs'],
             fileName: (format) => (format === 'es' ? 'index.mjs' : 'index.cjs'),
         },
