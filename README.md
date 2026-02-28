@@ -227,8 +227,10 @@ dist/
 │           ├── emojis.ts                 # Emoji shortcode mapping
 │           ├── getIndentWidth.ts         # Indentation calculation
 │           └── stripIndent.ts            # Indentation normalization
-├── pipelines/
-│   └── azure-pipelines.yml         # CI/CD pipeline definition
+├── .github/
+│   └── workflows/
+│       ├── ci.yml                   # GitHub Actions CI (build + test)
+│       └── publish.yml              # GitHub Actions npm publish on release
 ├── tsconfig.json                   # TypeScript config (development)
 ├── tsconfig.base.json              # Shared TypeScript settings
 ├── tsconfig.build.json             # TypeScript config (type emission)
