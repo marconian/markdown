@@ -2,6 +2,10 @@
     "name": "@marconian/markdown",
     "version": "1.0.2",
     "description": "React Markdown renderer with extended syntax support for admonitions, math equations (KaTeX), Mermaid charts, spoilers, definition lists, tables, code highlighting, footnotes, and emoji.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/marconian/markdown.git"
+    },
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.mjs",
