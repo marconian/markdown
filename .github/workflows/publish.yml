@@ -42,6 +42,4 @@ jobs:
             echo "tag=latest" >> "$GITHUB_OUTPUT"
           fi
 
-      - run: pnpm publish --tag ${{ steps.tag.outputs.tag }} --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm publish --provenance --tag ${{ steps.tag.outputs.tag }} --access public
